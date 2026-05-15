@@ -28,7 +28,22 @@
       "Bash(curl -sb /tmp/cookie.txt -X POST http://localhost:5001/api/admin/users/2/status -H 'Content-Type: application/json' -d '{\"status\":\"suspended\"}')",
       "Bash(curl -sc /tmp/cookie2.txt -X POST http://localhost:5001/login -d 'email=test@experlogix.com&password=User%40Pass1%21' -s)",
       "Bash(curl -sb /tmp/cookie.txt -X POST http://localhost:5001/api/admin/users/2/status -H 'Content-Type: application/json' -d '{\"status\":\"active\"}')",
-      "Bash(curl -sb /tmp/cookie.txt -X POST http://localhost:5001/api/admin/users/2/reset-link)"
+      "Bash(curl -sb /tmp/cookie.txt -X POST http://localhost:5001/api/admin/users/2/reset-link)",
+      "Bash(curl -fsSL https://railway.com/install.sh)",
+      "Bash(sh)",
+      "Bash(railway version *)",
+      "Bash(~/.railway/bin/railway version *)",
+      "Bash(/usr/local/bin/railway version *)",
+      "Read(//Users/grahamorourke/**)",
+      "Bash(export PATH=\"$HOME/.railway/bin:$PATH\")",
+      "Bash(railway whoami *)",
+      "Bash(railway init *)",
+      "Bash(railway status *)",
+      "Bash(railway link *)",
+      "Bash(railway volume *)",
+      "Bash(railway up *)",
+      "Bash(railway logs *)",
+      "Bash(railway domain *)"
     ]
   }
 }

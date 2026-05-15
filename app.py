@@ -39,9 +39,14 @@ DATA_DIR.mkdir(exist_ok=True)
 PERSIST_DIR = Path(os.environ.get('PERSIST_DIR', str(DATA_DIR)))
 PERSIST_DIR.mkdir(parents=True, exist_ok=True)
 
-XML_FILE   = DATA_DIR   / 'JIRA-PM-Changes-Features.xml'
+_XML_NAME  = 'JIRA-PM-Changes-Features.xml'
 RULES_FILE = PERSIST_DIR / 'rules.json'
 DB_FILE    = PERSIST_DIR / 'users.db'
+
+# XML lives in DATA_DIR when deployed fresh; gets seeded to PERSIST_DIR
+# on first boot so subsequent deploys find it on the volume.
+XML_FILE = (PERSIST_DIR / _XML_NAME) if (PERSIST_DIR / _XML_NAME).exists() \
+           else (DATA_DIR / _XML_NAME)
 
 TICKETS: list[dict] = []
 
@@ -754,15 +759,27 @@ def api_stats():
 # ---------------------------------------------------------------------------
 
 def _startup():
-    # Seed rules.json onto the persistent volume if it's the first deploy
-    seed = DATA_DIR / 'rules.json'
-    if not RULES_FILE.exists() and seed.exists() and RULES_FILE != seed:
-        shutil.copy(seed, RULES_FILE)
-        print(f'Seeded rules.json to {RULES_FILE}')
+    global TICKETS, XML_FILE
+
+    # Seed rules.json to the persistent volume on first deploy
+    seed_rules = DATA_DIR / 'rules.json'
+    if not RULES_FILE.exists() and seed_rules.exists() and RULES_FILE != seed_rules:
+        shutil.copy(seed_rules, RULES_FILE)
+        print(f'Seeded rules.json → {RULES_FILE}')
+
+    # Seed XML to the persistent volume on first deploy so future
+    # redeploys (which won't include the large file) still find it.
+    xml_in_data    = DATA_DIR    / _XML_NAME
+    xml_in_persist = PERSIST_DIR / _XML_NAME
+    if xml_in_data.exists() and not xml_in_persist.exists() and PERSIST_DIR != DATA_DIR:
+        print(f'Seeding {_XML_NAME} → {xml_in_persist} (this may take a moment)…')
+        shutil.copy(xml_in_data, xml_in_persist)
+        print('XML seeded.')
+    # Point XML_FILE to whichever location now has the file
+    XML_FILE = xml_in_persist if xml_in_persist.exists() else xml_in_data
 
     init_db()
 
-    global TICKETS
     print(f'Loading Jira tickets from {XML_FILE}...')
     TICKETS = parse_jira_xml(XML_FILE)
     print(f'Loaded {len(TICKETS)} tickets.')
