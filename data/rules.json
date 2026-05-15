@@ -5,7 +5,6 @@
   ],
   "oks": [
     "Verification of WebShop after an ERP Upgrade.  This is generally a paid testing and verification exercise (circa 1 day + separate costs for any issues arising) that is welcomed to ensure we retain customers.  this is especially low risk for minor upgrades of ERPs e.g. upgrade from SAP v9.3 to SAP v10.0 or from Intact v-line  to x-line and from Intact iQ services upgrade from SOAP to REST.  Larger gaps in upgrades e.g. from Intact V-line/x-line to iQ incur more risk and may require more paid discovery and verification as there may be changes to business rules, field mapping and other areas.",
-    "Addition of new twig variables and twig templates in areas like product page, product listing (category) page, account dashboard, checkout (as long as they do not interfere with the checkout layout) and on content pages.",
-    "Upgrades from checkout v1 to checkout v2 for customers that have no or few customisation to the checkout process. Note such an upgrade should always be tested on a sandbox and any services relating to verification, remapping of fields, setup or extension around v2 should be costed and charged to the customer."
+    "Template/design upgrades to Forta for customers.  It is OK for customers to move to the Forta design system and refresh their design.  This change will unlock important features like Visual Editor (previously \"VPB\")"
   ]
 }
