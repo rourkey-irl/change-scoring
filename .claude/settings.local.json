@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip3 show *)",
+      "Bash(pip3 install *)",
+      "Bash(curl -s -X POST http://localhost:5001/api/score -H 'Content-Type: application/json' -d '{\"query\": \"Customer wants to migrate from SOAP to REST API for their product configurator integration\"}')",
+      "Bash(python3 -m json.tool)",
+      "Bash(curl -s -X POST http://localhost:5001/api/rules -H 'Content-Type: application/json' -d '{\"warnings\": [\"Do not accept requests that require custom ERP-specific code\"], \"oks\": [\"REST API migrations are standard and accepted\"]}')",
+      "Bash(curl -s http://localhost:5001/api/rules)",
+      "Bash(python3 app.py &> /tmp/change-scoring.log & *)",
+      "Bash(lsof -ti:5001)",
+      "Bash(gh auth *)",
+      "Bash(git --version)",
+      "Bash(git init *)",
+      "Bash(git add *)"
+    ]
+  }
+}

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Change Request Scoring Agent</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-logo">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="28" height="28" rx="6" fill="#2563EB"/>
+          <path d="M7 14.5L11.5 19L21 9" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="header-title">Change Request Scoring Agent</span>
+      </div>
+      <div class="header-meta" id="stats-badge">Loading tickets…</div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="layout">
+      <!-- Left panel: scorer -->
+      <section class="panel scorer-panel">
+        <h2 class="panel-heading">Score a New Request</h2>
+        <p class="panel-sub">Describe the change request or product suggestion below. The agent will score it against historical Jira tickets and your defined rules.</p>
+
+        <div class="form-group">
+          <label class="form-label" for="query-input">Request Description</label>
+          <textarea
+            id="query-input"
+            class="form-textarea"
+            placeholder="Enter as much information as possible - ideally a very detailed description of the business challenge, suggested change, ERP and any likely product impact/changes."
+            rows="6"
+          ></textarea>
+        </div>
+
+        <button id="score-btn" class="btn btn-primary" onclick="scoreRequest()">
+          <span id="score-btn-text">Score Request</span>
+          <span id="score-btn-spinner" class="spinner hidden"></span>
+        </button>
+
+        <div id="error-box" class="error-box hidden"></div>
+
+        <!-- Results -->
+        <div id="results" class="results hidden">
+          <div class="score-section">
+            <div class="score-header">
+              <span class="score-label">Suitability Score</span>
+              <span id="score-value" class="score-value">0</span>
+            </div>
+            <div class="score-bar-track">
+              <div id="score-bar" class="score-bar"></div>
+            </div>
+            <div class="score-bands">
+              <span>Not suitable</span>
+              <span>Mixed</span>
+              <span>Suitable</span>
+            </div>
+          </div>
+
+          <div class="result-block">
+            <div class="result-block-label">Explanation</div>
+            <p id="result-explanation" class="result-text"></p>
+          </div>
+
+          <div class="result-block" id="recommendation-block">
+            <div class="result-block-label">Recommended Type</div>
+            <div class="recommendation-row">
+              <span id="recommendation-badge" class="type-badge"></span>
+              <span id="recommendation-reason" class="result-text"></span>
+            </div>
+          </div>
+
+          <div class="result-block" id="similar-block">
+            <div class="result-block-label">Similar Past Tickets</div>
+            <div id="similar-tickets" class="ticket-list"></div>
+          </div>
+
+          <div class="result-meta" id="result-meta"></div>
+        </div>
+      </section>
+
+      <!-- Right panel: rules -->
+      <aside class="panel rules-panel">
+        <h2 class="panel-heading">Policy Rules</h2>
+        <p class="panel-sub">Define Warnings and OKs that the agent will apply when scoring requests. These are saved and persist across sessions.</p>
+
+        <div class="rules-section">
+          <div class="rules-section-header">
+            <span class="rules-label warning-label">⚠ Warnings</span>
+            <button class="btn btn-small btn-warning" onclick="addRule('warning')">+ Add</button>
+          </div>
+          <p class="rules-hint">Requests matching these patterns should score lower.</p>
+          <div id="warnings-list" class="rules-list"></div>
+        </div>
+
+        <div class="rules-section">
+          <div class="rules-section-header">
+            <span class="rules-label ok-label">✓ OKs</span>
+            <button class="btn btn-small btn-ok" onclick="addRule('ok')">+ Add</button>
+          </div>
+          <p class="rules-hint">Requests matching these patterns are generally acceptable.</p>
+          <div id="oks-list" class="rules-list"></div>
+        </div>
+
+        <div class="rules-actions">
+          <button class="btn btn-secondary" onclick="saveRules()">
+            <span id="save-rules-text">Save Rules</span>
+          </button>
+        </div>
+
+        <div id="rules-status" class="rules-status hidden"></div>
+
+        <div class="rules-examples">
+          <div class="rules-examples-label">Examples</div>
+          <div class="examples-grid">
+            <button class="example-chip warning-chip" onclick="addExampleRule('warning', 'Checkout changes that affect the core process flow')">⚠ Checkout Flow changes</button>
+            <button class="example-chip warning-chip" onclick="addExampleRule('warning', 'Changes that alter core platform behaviour for all customers')">⚠ Core platform changes</button>
+            <button class="example-chip ok-chip" onclick="addExampleRule('ok', 'REST API migrations from SOAP are standard and accepted')">✓ REST migrations</button>
+            <button class="example-chip ok-chip" onclick="addExampleRule('ok', 'UI/UX customisation for individual customer branding is acceptable')">✓ UI/UX customisation</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>
