@@ -4,6 +4,7 @@ import re
 import sqlite3
 import secrets
 import hashlib
+import shutil
 from datetime import datetime, timedelta, timezone
 from functools import wraps
 from pathlib import Path
@@ -29,11 +30,18 @@ app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=8)
 
 BASE_DIR = Path(__file__).parent
-DATA_DIR = BASE_DIR / 'data'
+DATA_DIR = BASE_DIR / 'data'          # app files: XML, seed rules
 DATA_DIR.mkdir(exist_ok=True)
-RULES_FILE = DATA_DIR / 'rules.json'
-XML_FILE  = DATA_DIR / 'JIRA-PM-Changes-Features.xml'
-DB_FILE   = DATA_DIR / 'users.db'
+
+# PERSIST_DIR: writable storage that survives redeploys.
+# Locally defaults to DATA_DIR. On Railway, point to a mounted volume via
+# the PERSIST_DIR environment variable (e.g. /persist).
+PERSIST_DIR = Path(os.environ.get('PERSIST_DIR', str(DATA_DIR)))
+PERSIST_DIR.mkdir(parents=True, exist_ok=True)
+
+XML_FILE   = DATA_DIR   / 'JIRA-PM-Changes-Features.xml'
+RULES_FILE = PERSIST_DIR / 'rules.json'
+DB_FILE    = PERSIST_DIR / 'users.db'
 
 TICKETS: list[dict] = []
 
@@ -742,14 +750,33 @@ def api_stats():
 
 
 # ---------------------------------------------------------------------------
-# Entry point
+# Startup — runs under both `python app.py` and gunicorn
 # ---------------------------------------------------------------------------
 
-if __name__ == '__main__':
+def _startup():
+    # Seed rules.json onto the persistent volume if it's the first deploy
+    seed = DATA_DIR / 'rules.json'
+    if not RULES_FILE.exists() and seed.exists() and RULES_FILE != seed:
+        shutil.copy(seed, RULES_FILE)
+        print(f'Seeded rules.json to {RULES_FILE}')
+
     init_db()
+
+    global TICKETS
     print(f'Loading Jira tickets from {XML_FILE}...')
     TICKETS = parse_jira_xml(XML_FILE)
     print(f'Loaded {len(TICKETS)} tickets.')
+
     if user_count() == 0:
-        print('No users found — visit http://localhost:5001/setup to create the first admin account.')
+        print('No users found — visit /setup to create the first admin account.')
+
+
+_startup()
+
+
+# ---------------------------------------------------------------------------
+# Entry point (local dev only)
+# ---------------------------------------------------------------------------
+
+if __name__ == '__main__':
     app.run(debug=True, port=5001)
