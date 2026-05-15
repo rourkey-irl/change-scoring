@@ -6,6 +6,9 @@ data/users.db
 data/users.db-shm
 data/users.db-wal
 
+# Jira export — large data file, managed locally only
+data/JIRA-PM-Changes-Features.xml
+
 # Python
 __pycache__/
 *.pyc
