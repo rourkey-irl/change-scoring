@@ -286,6 +286,12 @@ body {
   color: #2563EB;
   font-family: monospace;
 }
+.ticket-key-link {
+  text-decoration: none;
+}
+.ticket-key-link:hover {
+  text-decoration: underline;
+}
 .ticket-status {
   font-size: 11px;
   padding: 1px 7px;

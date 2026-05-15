@@ -694,6 +694,12 @@ def api_score():
         return jsonify({'error': str(e)}), 500
 
     result['tickets_searched'] = len(similar)
+
+    # Enrich similar_tickets with Jira links looked up from the ticket index
+    ticket_links = {t['key']: t['link'] for t in TICKETS if t.get('link')}
+    for t in result.get('similar_tickets', []):
+        t['link'] = ticket_links.get(t.get('key'), '')
+
     return jsonify(result)
 
 

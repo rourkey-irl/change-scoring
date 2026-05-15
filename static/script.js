@@ -143,9 +143,13 @@ function buildTicketCard(t) {
 
   const statusClass = statusBadgeClass(t.status);
 
+  const keyHtml = t.link
+    ? `<a class="ticket-key ticket-key-link" href="${escHtml(t.link)}" target="_blank" rel="noopener noreferrer">${escHtml(t.key)}</a>`
+    : `<span class="ticket-key">${escHtml(t.key)}</span>`;
+
   div.innerHTML = `
     <div class="ticket-item-header">
-      <span class="ticket-key">${escHtml(t.key)}</span>
+      ${keyHtml}
       <span class="ticket-status ${statusClass}">${escHtml(t.status)}</span>
       <span class="ticket-status" style="background:#F1F5F9;color:#475569">${escHtml(t.type)}</span>
     </div>
