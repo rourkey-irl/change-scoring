@@ -595,9 +595,33 @@ body {
 .admin-add-panel .auth-field { margin-bottom: 12px; }
 .admin-add-panel .btn { margin-top: 4px; }
 
+/* Admin nav tabs */
+.admin-nav {
+  display: flex;
+  gap: 4px;
+  border-bottom: 2px solid #E2E8F0;
+  margin-bottom: 24px;
+}
+.admin-nav-link {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #64748B;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  border-radius: 6px 6px 0 0;
+  transition: color 0.15s, border-color 0.15s;
+}
+.admin-nav-link:hover { color: #1E293B; }
+.admin-nav-active {
+  color: #2563EB;
+  border-bottom-color: #2563EB;
+}
+
 /* Admin rules panel */
 .admin-rules-wrap {
-  margin-top: 24px;
+  margin-top: 0;
 }
 .admin-rules-header {
   display: flex;

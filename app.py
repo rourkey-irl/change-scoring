@@ -583,7 +583,14 @@ def reset_password(token):
 def admin():
     users = [dict(u) for u in get_all_users()]
     return render_template('admin.html', users=users,
-                           current_user_id=session['user_id'])
+                           current_user_id=session['user_id'],
+                           active_page='users')
+
+
+@app.route('/admin/rules')
+@admin_required
+def admin_rules_page():
+    return render_template('admin_rules.html', active_page='rules')
 
 
 @app.route('/api/admin/users', methods=['POST'])

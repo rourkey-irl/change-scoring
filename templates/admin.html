@@ -24,6 +24,7 @@
   </header>
 
   <main class="main">
+    {% include '_admin_nav.html' %}
     <div class="admin-layout">
 
       <!-- Add user panel -->
@@ -152,51 +153,6 @@
         </div>
       </section>
 
-    </div>
-
-    <!-- Policy Rules panel (full width) -->
-    <div class="admin-rules-wrap">
-      <section class="panel">
-        <div class="admin-rules-header">
-          <div>
-            <h2 class="panel-heading">Policy Rules</h2>
-            <p class="panel-sub">Warnings and OKs applied by the agent when scoring requests. Changes take effect immediately for all users.</p>
-          </div>
-          <div class="admin-rules-save-area">
-            <span id="rules-save-status" class="rules-status hidden"></span>
-            <button class="btn btn-primary admin-rules-save-btn" onclick="saveAdminRules()">
-              <span id="rules-save-text">Save Rules</span>
-              <span id="rules-save-spinner" class="spinner hidden"></span>
-            </button>
-          </div>
-        </div>
-
-        <div class="admin-rules-cols">
-
-          <!-- Warnings -->
-          <div class="admin-rules-col">
-            <div class="admin-rules-col-header">
-              <span class="rules-label warning-label">⚠ Warnings</span>
-              <p class="rules-hint">Requests matching these patterns should score lower.</p>
-            </div>
-            <div id="admin-warnings-list" class="admin-rules-list"></div>
-            <button class="btn btn-small btn-warning admin-add-rule-btn"
-                    onclick="addAdminRule('warning')">+ Add Warning</button>
-          </div>
-
-          <!-- OKs -->
-          <div class="admin-rules-col">
-            <div class="admin-rules-col-header">
-              <span class="rules-label ok-label">✓ OKs</span>
-              <p class="rules-hint">Requests matching these patterns are generally acceptable.</p>
-            </div>
-            <div id="admin-oks-list" class="admin-rules-list"></div>
-            <button class="btn btn-small btn-ok admin-add-rule-btn"
-                    onclick="addAdminRule('ok')">+ Add OK</button>
-          </div>
-
-        </div>
-      </section>
     </div>
 
   </main>
