@@ -710,7 +710,7 @@ def api_get_rules():
 
 
 @app.route('/api/rules', methods=['POST'])
-@login_required
+@admin_required
 def api_save_rules():
     data  = request.get_json(silent=True) or {}
     rules = {

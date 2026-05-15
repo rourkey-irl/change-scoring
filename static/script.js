@@ -202,27 +202,35 @@ function buildRuleItem(text, type, idx) {
   div.dataset.type = type;
   div.dataset.idx = idx;
 
-  const ta = document.createElement('textarea');
-  ta.className = 'rule-text';
-  ta.value = text;
-  ta.rows = 2;
-  ta.addEventListener('input', () => {
-    const listKey = type === 'warning' ? 'warnings' : 'oks';
-    rules[listKey][idx] = ta.value;
-    autoResize(ta);
-  });
-  // NOTE: autoResize must NOT be called here — the element isn't in the DOM yet,
-  // so scrollHeight returns 0 and locks the textarea to height: 0px.
-  // The rows="2" attribute handles the initial height; autoResize fires on input.
+  if (IS_ADMIN) {
+    const ta = document.createElement('textarea');
+    ta.className = 'rule-text';
+    ta.value = text;
+    ta.rows = 2;
+    ta.addEventListener('input', () => {
+      const listKey = type === 'warning' ? 'warnings' : 'oks';
+      rules[listKey][idx] = ta.value;
+      autoResize(ta);
+    });
+    // NOTE: autoResize must NOT be called here — the element isn't in the DOM yet,
+    // so scrollHeight returns 0 and locks the textarea to height: 0px.
+    // The rows="2" attribute handles the initial height; autoResize fires on input.
 
-  const del = document.createElement('button');
-  del.className = 'rule-delete';
-  del.textContent = '×';
-  del.title = 'Remove';
-  del.addEventListener('click', () => deleteRule(type, idx));
+    const del = document.createElement('button');
+    del.className = 'rule-delete';
+    del.textContent = '×';
+    del.title = 'Remove';
+    del.addEventListener('click', () => deleteRule(type, idx));
 
-  div.appendChild(ta);
-  div.appendChild(del);
+    div.appendChild(ta);
+    div.appendChild(del);
+  } else {
+    const p = document.createElement('p');
+    p.className = 'rule-text-readonly';
+    p.textContent = text;
+    div.appendChild(p);
+  }
+
   return div;
 }
 

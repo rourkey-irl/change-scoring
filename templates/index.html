@@ -95,12 +95,18 @@
       <!-- Right panel: rules -->
       <aside class="panel rules-panel">
         <h2 class="panel-heading">Policy Rules</h2>
+        {% if user_role == 'admin' %}
         <p class="panel-sub">Define Warnings and OKs that the agent will apply when scoring requests. These are saved and persist across sessions.</p>
+        {% else %}
+        <p class="panel-sub">Active policy rules applied when scoring requests. Contact an administrator to make changes.</p>
+        {% endif %}
 
         <div class="rules-section">
           <div class="rules-section-header">
             <span class="rules-label warning-label">⚠ Warnings</span>
+            {% if user_role == 'admin' %}
             <button class="btn btn-small btn-warning" onclick="addRule('warning')">+ Add</button>
+            {% endif %}
           </div>
           <p class="rules-hint">Requests matching these patterns should score lower.</p>
           <div id="warnings-list" class="rules-list"></div>
@@ -109,12 +115,15 @@
         <div class="rules-section">
           <div class="rules-section-header">
             <span class="rules-label ok-label">✓ OKs</span>
+            {% if user_role == 'admin' %}
             <button class="btn btn-small btn-ok" onclick="addRule('ok')">+ Add</button>
+            {% endif %}
           </div>
           <p class="rules-hint">Requests matching these patterns are generally acceptable.</p>
           <div id="oks-list" class="rules-list"></div>
         </div>
 
+        {% if user_role == 'admin' %}
         <div class="rules-actions">
           <button class="btn btn-secondary" onclick="saveRules()">
             <span id="save-rules-text">Save Rules</span>
@@ -132,10 +141,12 @@
             <button class="example-chip ok-chip" onclick="addExampleRule('ok', 'UI/UX customisation for individual customer branding is acceptable')">✓ UI/UX customisation</button>
           </div>
         </div>
+        {% endif %}
       </aside>
     </div>
   </main>
 
+  <script>const IS_ADMIN = {{ 'true' if user_role == 'admin' else 'false' }};</script>
   <script src="/static/script.js"></script>
 </body>
 </html>

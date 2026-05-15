@@ -367,6 +367,13 @@ body {
   min-height: 2.8em; /* safety net: prevents collapse if autoResize fires before DOM insertion */
 }
 .rule-text:focus { outline: none; }
+.rule-text-readonly {
+  flex: 1;
+  font-size: 13px;
+  color: #374151;
+  line-height: 1.5;
+  margin: 0;
+}
 .rule-delete {
   background: none;
   border: none;
