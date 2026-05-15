@@ -40,7 +40,7 @@ BASE_DIR = Path(__file__).parent
 DATA_DIR = BASE_DIR / 'data'
 DATA_DIR.mkdir(exist_ok=True)
 RULES_FILE = DATA_DIR / 'rules.json'
-XML_FILE = BASE_DIR / 'JIRA-PM-Changes-Features.xml'
+XML_FILE = DATA_DIR / 'JIRA-PM-Changes-Features.xml'
 
 TICKETS: list[dict] = []
 
