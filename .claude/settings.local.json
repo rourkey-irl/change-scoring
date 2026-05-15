@@ -18,7 +18,17 @@
       "Bash(xargs kill -9)",
       "Bash(python3 app.py)",
       "Bash(curl -s http://localhost:5001/api/stats)",
-      "Bash(curl -s -X POST http://localhost:5001/api/score -H 'Content-Type: application/json' -d '{\"query\": \"Customer wants a custom PDF export of their order history with their own branding and logo\"}')"
+      "Bash(curl -s -X POST http://localhost:5001/api/score -H 'Content-Type: application/json' -d '{\"query\": \"Customer wants a custom PDF export of their order history with their own branding and logo\"}')",
+      "Bash(git commit -m ' *)",
+      "Bash(curl -si http://localhost:5001/)",
+      "Bash(curl -sc /tmp/cookie.txt -X POST http://localhost:5001/setup -d 'name=Graham+O'\\\\''Rourke&email=graham@experlogix.com&password=Admin%40Pass1%21&confirm=Admin%40Pass1%21' -si)",
+      "Bash(curl -sc /tmp/cookie.txt -b /tmp/cookie.txt -X POST http://localhost:5001/login -d 'email=graham@experlogix.com&password=Admin%40Pass1%21' -si)",
+      "Bash(curl -sb /tmp/cookie.txt http://localhost:5001/ -si)",
+      "Bash(curl -sb /tmp/cookie.txt -X POST http://localhost:5001/api/admin/users -H 'Content-Type: application/json' -d '{\"name\":\"Test User\",\"email\":\"test@experlogix.com\",\"password\":\"User@Pass1!\",\"role\":\"user\"}')",
+      "Bash(curl -sb /tmp/cookie.txt -X POST http://localhost:5001/api/admin/users/2/status -H 'Content-Type: application/json' -d '{\"status\":\"suspended\"}')",
+      "Bash(curl -sc /tmp/cookie2.txt -X POST http://localhost:5001/login -d 'email=test@experlogix.com&password=User%40Pass1%21' -s)",
+      "Bash(curl -sb /tmp/cookie.txt -X POST http://localhost:5001/api/admin/users/2/status -H 'Content-Type: application/json' -d '{\"status\":\"active\"}')",
+      "Bash(curl -sb /tmp/cookie.txt -X POST http://localhost:5001/api/admin/users/2/reset-link)"
     ]
   }
 }

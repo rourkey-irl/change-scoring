@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Management — Change Request Scoring Agent</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-logo">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="28" height="28" rx="6" fill="#2563EB"/>
+          <path d="M7 14.5L11.5 19L21 9" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="header-title">User Management</span>
+      </div>
+      <div class="header-nav">
+        <a href="/" class="header-link">← Back to App</a>
+        <a href="/logout" class="header-link header-link-muted">Sign Out</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="admin-layout">
+
+      <!-- Add user panel -->
+      <aside class="panel admin-add-panel">
+        <h2 class="panel-heading">Add User</h2>
+        <p class="panel-sub">Provision a new user account. The user must change their password on first login via the Forgot Password link.</p>
+
+        <div id="add-error" class="auth-error hidden"></div>
+        <div id="add-success" class="auth-success hidden"></div>
+
+        <div class="auth-field">
+          <label for="new-name">Full name</label>
+          <input type="text" id="new-name" placeholder="Jane Smith" />
+        </div>
+        <div class="auth-field">
+          <label for="new-email">Email address</label>
+          <input type="email" id="new-email" placeholder="jane@example.com" />
+        </div>
+        <div class="auth-field">
+          <label for="new-password">Temporary password</label>
+          <input type="password" id="new-password" placeholder="••••••••••" />
+          <p class="auth-hint">Min 10 chars · uppercase · lowercase · number · special character</p>
+        </div>
+        <div class="auth-field">
+          <label for="new-role">Role</label>
+          <select id="new-role" class="form-select">
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" onclick="addUser()">
+          <span id="add-btn-text">Add User</span>
+          <span id="add-btn-spinner" class="spinner hidden"></span>
+        </button>
+      </aside>
+
+      <!-- Users table -->
+      <section class="panel admin-table-panel">
+        <h2 class="panel-heading">All Users</h2>
+
+        <!-- Modal overlay -->
+        <div id="modal-overlay" class="modal-overlay hidden" onclick="closeModal()"></div>
+        <div id="reset-modal" class="modal hidden">
+          <h3 class="modal-title">Reset Password</h3>
+          <p class="modal-sub">Set a new password for <strong id="modal-user-name"></strong>.</p>
+          <div id="modal-error" class="auth-error hidden"></div>
+          <div class="auth-field">
+            <label>New password</label>
+            <input type="password" id="modal-password" placeholder="••••••••••" />
+            <p class="auth-hint">Min 10 chars · uppercase · lowercase · number · special character</p>
+          </div>
+          <div class="auth-field">
+            <label>Confirm password</label>
+            <input type="password" id="modal-confirm" placeholder="••••••••••" />
+          </div>
+          <div class="modal-actions">
+            <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="submitResetPassword()">Set Password</button>
+          </div>
+        </div>
+
+        <!-- Reset link modal -->
+        <div id="link-modal" class="modal hidden">
+          <h3 class="modal-title">Password Reset Link</h3>
+          <p class="modal-sub">Share this link with the user. It expires in 1 hour and can only be used once.</p>
+          <div class="reset-link-box" style="margin-top:12px">
+            <a id="link-modal-url" href="#" class="reset-link-url" target="_blank"></a>
+            <button class="btn btn-secondary btn-copy" onclick="copyModalLink(this)">Copy link</button>
+          </div>
+          <div class="modal-actions" style="margin-top:16px">
+            <button class="btn btn-primary" onclick="closeLinkModal()">Done</button>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="user-table" id="user-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Last Login</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for user in users %}
+              <tr id="user-row-{{ user.id }}" class="{% if user.status == 'suspended' %}row-suspended{% endif %}">
+                <td>{{ user.name }}</td>
+                <td class="td-email">{{ user.email }}</td>
+                <td>
+                  <span class="role-badge {% if user.role == 'admin' %}role-admin{% else %}role-user{% endif %}">
+                    {{ user.role }}
+                  </span>
+                </td>
+                <td>
+                  <span class="status-pill {% if user.status == 'active' %}status-active{% else %}status-suspended{% endif %}">
+                    {{ user.status }}
+                  </span>
+                </td>
+                <td class="td-muted">{{ user.last_login[:16].replace('T',' ') if user.last_login else 'Never' }}</td>
+                <td class="td-actions">
+                  {% if user.id != current_user_id %}
+                    {% if user.status == 'active' %}
+                    <button class="action-btn action-warn"
+                            onclick="setStatus({{ user.id }}, 'suspended')">Suspend</button>
+                    {% else %}
+                    <button class="action-btn action-ok"
+                            onclick="setStatus({{ user.id }}, 'active')">Activate</button>
+                    {% endif %}
+                    <button class="action-btn action-neutral"
+                            onclick="openResetModal({{ user.id }}, '{{ user.name | e }}')">Reset Pwd</button>
+                    <button class="action-btn action-neutral"
+                            onclick="generateResetLink({{ user.id }})">Reset Link</button>
+                    <button class="action-btn action-danger"
+                            onclick="removeUser({{ user.id }}, '{{ user.name | e }}')">Remove</button>
+                  {% else %}
+                    <span class="td-muted">— (you)</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <script src="/static/admin.js"></script>
+</body>
+</html>

@@ -1,6 +1,11 @@
 # Environment — never commit your API key
 .env
 
+# User database — contains account data, never commit
+data/users.db
+data/users.db-shm
+data/users.db-wal
+
 # Python
 __pycache__/
 *.pyc

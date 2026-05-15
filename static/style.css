@@ -413,3 +413,265 @@ body {
 
 /* Utilities */
 .hidden { display: none !important; }
+
+/* =========================================================================
+   Header additions (user nav)
+   ========================================================================= */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.header-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.header-username {
+  font-size: 13px;
+  color: #475569;
+  font-weight: 500;
+}
+.header-link {
+  font-size: 13px;
+  font-weight: 600;
+  color: #2563EB;
+  text-decoration: none;
+}
+.header-link:hover { text-decoration: underline; }
+.header-link-muted { color: #94A3B8; font-weight: 400; }
+.header-link-muted:hover { color: #64748B; }
+
+/* =========================================================================
+   Auth pages (login, setup, forgot, reset)
+   ========================================================================= */
+.auth-body {
+  background: #F1F5F9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px;
+}
+.auth-card {
+  background: #fff;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 40px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+}
+.auth-logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.auth-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0F172A;
+  text-align: center;
+  margin-bottom: 6px;
+}
+.auth-sub {
+  font-size: 13px;
+  color: #64748B;
+  text-align: center;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+.auth-form { display: flex; flex-direction: column; gap: 16px; }
+.auth-field { display: flex; flex-direction: column; gap: 5px; }
+.auth-field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+}
+.auth-field input, .form-select {
+  padding: 10px 12px;
+  border: 1px solid #CBD5E1;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #1E293B;
+  background: #FAFAFA;
+  font-family: inherit;
+  transition: border-color 0.15s;
+  width: 100%;
+}
+.auth-field input:focus, .form-select:focus {
+  outline: none;
+  border-color: #2563EB;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.08);
+}
+.auth-hint {
+  font-size: 11px;
+  color: #94A3B8;
+  line-height: 1.4;
+  margin-top: 2px;
+}
+.auth-error {
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #B91C1C;
+  font-size: 13px;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+.auth-error-list {
+  margin: 0;
+  padding-left: 18px;
+}
+.auth-success {
+  background: #F0FDF4;
+  border: 1px solid #86EFAC;
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #15803D;
+  font-size: 13px;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+.auth-footer {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 13px;
+}
+.auth-footer a { color: #2563EB; text-decoration: none; }
+.auth-footer a:hover { text-decoration: underline; }
+
+/* Reset link display */
+.reset-link-box {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.reset-link-label { font-size: 12px; font-weight: 600; color: #64748B; }
+.reset-link-url {
+  font-size: 12px;
+  color: #2563EB;
+  word-break: break-all;
+  line-height: 1.5;
+}
+.btn-copy { font-size: 12px; padding: 6px 12px; }
+
+/* =========================================================================
+   Admin panel
+   ========================================================================= */
+.admin-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .admin-layout { grid-template-columns: 1fr; }
+}
+.admin-add-panel .auth-field { margin-bottom: 12px; }
+.admin-add-panel .btn { margin-top: 4px; }
+
+/* Table */
+.table-wrap { overflow-x: auto; }
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.user-table th {
+  text-align: left;
+  padding: 10px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94A3B8;
+  border-bottom: 1px solid #E2E8F0;
+  white-space: nowrap;
+}
+.user-table td {
+  padding: 12px 12px;
+  border-bottom: 1px solid #F1F5F9;
+  color: #374151;
+  vertical-align: middle;
+}
+.user-table tbody tr:hover { background: #FAFAFA; }
+.row-suspended td { opacity: 0.55; }
+.td-email { font-family: monospace; font-size: 12px; }
+.td-muted { color: #94A3B8; font-size: 12px; }
+.td-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+
+/* Badges */
+.role-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.role-admin { background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; }
+.role-user  { background: #F1F5F9; color: #475569; border: 1px solid #CBD5E1; }
+
+.status-pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.status-active    { background: #D1FAE5; color: #065F46; }
+.status-suspended { background: #FEE2E2; color: #991B1B; }
+
+/* Action buttons */
+.action-btn {
+  padding: 4px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: opacity 0.15s;
+  white-space: nowrap;
+}
+.action-btn:hover { opacity: 0.8; }
+.action-ok      { background: #D1FAE5; color: #065F46; border-color: #6EE7B7; }
+.action-warn    { background: #FEF3C7; color: #92400E; border-color: #FDE68A; }
+.action-danger  { background: #FEE2E2; color: #991B1B; border-color: #FECACA; }
+.action-neutral { background: #F1F5F9; color: #374151; border-color: #CBD5E1; }
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 40;
+}
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border-radius: 12px;
+  padding: 28px;
+  width: 100%;
+  max-width: 400px;
+  z-index: 50;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+}
+.modal-title { font-size: 17px; font-weight: 700; color: #0F172A; margin-bottom: 6px; }
+.modal-sub   { font-size: 13px; color: #64748B; margin-bottom: 16px; line-height: 1.5; }
+.modal .auth-field { margin-bottom: 12px; }
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+.modal-actions .btn { width: auto; padding: 8px 18px; }

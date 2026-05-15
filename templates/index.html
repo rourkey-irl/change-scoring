@@ -16,7 +16,16 @@
         </svg>
         <span class="header-title">Change Request Scoring Agent</span>
       </div>
-      <div class="header-meta" id="stats-badge">Loading tickets…</div>
+      <div class="header-right">
+        <div class="header-meta" id="stats-badge">Loading tickets…</div>
+        <div class="header-user">
+          {% if user_role == 'admin' %}
+          <a href="/admin" class="header-link">Admin</a>
+          {% endif %}
+          <span class="header-username">{{ user_name }}</span>
+          <a href="/logout" class="header-link header-link-muted">Sign Out</a>
+        </div>
+      </div>
     </div>
   </header>
 
