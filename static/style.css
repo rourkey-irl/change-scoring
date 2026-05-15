@@ -595,6 +595,82 @@ body {
 .admin-add-panel .auth-field { margin-bottom: 12px; }
 .admin-add-panel .btn { margin-top: 4px; }
 
+/* Admin rules panel */
+.admin-rules-wrap {
+  margin-top: 24px;
+}
+.admin-rules-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.admin-rules-save-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.admin-rules-save-btn {
+  width: auto;
+  padding: 9px 20px;
+}
+.admin-rules-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+@media (max-width: 700px) {
+  .admin-rules-cols { grid-template-columns: 1fr; }
+}
+.admin-rules-col-header {
+  margin-bottom: 10px;
+}
+.admin-rules-col-header .rules-hint {
+  margin-top: 3px;
+}
+.admin-rules-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+  min-height: 20px;
+}
+.admin-rules-empty {
+  font-size: 12px;
+  color: #CBD5E1;
+  padding: 4px 0;
+}
+.admin-rule-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 7px;
+  padding: 8px 10px;
+}
+.admin-rule-row.warning-item { border-left: 3px solid #F59E0B; }
+.admin-rule-row.ok-item      { border-left: 3px solid #10B981; }
+.admin-rule-textarea {
+  flex: 1;
+  font-size: 13px;
+  color: #1E293B;
+  line-height: 1.5;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  resize: none;
+  padding: 0;
+  min-height: 2.8em;
+}
+.admin-rule-textarea:focus { outline: none; }
+.admin-add-rule-btn {
+  margin-top: 2px;
+}
+
 /* Table */
 .table-wrap { overflow-x: auto; }
 .user-table {

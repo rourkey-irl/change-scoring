@@ -1,4 +1,137 @@
 let resetTargetId = null;
+let adminRules = { warnings: [], oks: [] };
+
+// ---------------------------------------------------------------------------
+// Policy Rules — load & render
+// ---------------------------------------------------------------------------
+
+async function loadAdminRules() {
+  try {
+    const res = await fetch('/api/rules');
+    adminRules = await res.json();
+    renderAdminRules();
+  } catch (e) {
+    console.error('Failed to load rules', e);
+  }
+}
+
+function renderAdminRules() {
+  renderAdminRuleList('admin-warnings-list', adminRules.warnings, 'warning');
+  renderAdminRuleList('admin-oks-list',      adminRules.oks,      'ok');
+}
+
+function renderAdminRuleList(containerId, items, type) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+  if (items.length === 0) {
+    container.innerHTML = `<p class="admin-rules-empty">No ${type === 'warning' ? 'warnings' : 'OKs'} defined yet.</p>`;
+    return;
+  }
+  items.forEach((text, idx) => container.appendChild(buildAdminRuleItem(text, type, idx)));
+}
+
+function buildAdminRuleItem(text, type, idx) {
+  const row = document.createElement('div');
+  row.className = `admin-rule-row ${type}-item`;
+
+  const ta = document.createElement('textarea');
+  ta.className   = 'admin-rule-textarea';
+  ta.value       = text;
+  ta.rows        = 2;
+  ta.placeholder = type === 'warning' ? 'Describe what to warn against…' : 'Describe what is acceptable…';
+  ta.addEventListener('input', () => {
+    const key = type === 'warning' ? 'warnings' : 'oks';
+    adminRules[key][idx] = ta.value;
+    adminAutoResize(ta);
+  });
+
+  const del = document.createElement('button');
+  del.className   = 'rule-delete';
+  del.textContent = '×';
+  del.title       = 'Remove';
+  del.addEventListener('click', () => deleteAdminRule(type, idx));
+
+  row.appendChild(ta);
+  row.appendChild(del);
+  return row;
+}
+
+function adminAutoResize(ta) {
+  ta.style.height = 'auto';
+  ta.style.height = ta.scrollHeight + 'px';
+}
+
+function addAdminRule(type) {
+  const key = type === 'warning' ? 'warnings' : 'oks';
+  adminRules[key].push('');
+  renderAdminRules();
+  // Focus the new textarea
+  const listId   = type === 'warning' ? 'admin-warnings-list' : 'admin-oks-list';
+  const textareas = document.getElementById(listId).querySelectorAll('textarea');
+  if (textareas.length) textareas[textareas.length - 1].focus();
+}
+
+function deleteAdminRule(type, idx) {
+  const key = type === 'warning' ? 'warnings' : 'oks';
+  adminRules[key].splice(idx, 1);
+  renderAdminRules();
+}
+
+async function saveAdminRules() {
+  // Sync any textarea edits that haven't fired an input event
+  syncAdminTextareas();
+
+  const saveText    = document.getElementById('rules-save-text');
+  const saveSpinner = document.getElementById('rules-save-spinner');
+  const statusEl    = document.getElementById('rules-save-status');
+
+  saveText.textContent = 'Saving…';
+  saveSpinner.classList.remove('hidden');
+  statusEl.classList.add('hidden');
+
+  // Strip blank entries before saving
+  const payload = {
+    warnings: adminRules.warnings.filter(w => w.trim()),
+    oks:      adminRules.oks.filter(o => o.trim()),
+  };
+
+  try {
+    const res = await fetch('/api/rules', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(payload),
+    });
+
+    if (!res.ok) throw new Error('Server error');
+
+    // Sync back so blank entries are removed from the local state too
+    adminRules = payload;
+    renderAdminRules();
+
+    statusEl.textContent = 'Rules saved.';
+    statusEl.className   = 'rules-status success';
+    statusEl.classList.remove('hidden');
+    setTimeout(() => statusEl.classList.add('hidden'), 3000);
+  } catch {
+    statusEl.textContent = 'Failed to save rules.';
+    statusEl.className   = 'rules-status error';
+    statusEl.classList.remove('hidden');
+  } finally {
+    saveText.textContent = 'Save Rules';
+    saveSpinner.classList.add('hidden');
+  }
+}
+
+function syncAdminTextareas() {
+  document.querySelectorAll('#admin-warnings-list textarea').forEach((ta, i) => {
+    if (i < adminRules.warnings.length) adminRules.warnings[i] = ta.value;
+  });
+  document.querySelectorAll('#admin-oks-list textarea').forEach((ta, i) => {
+    if (i < adminRules.oks.length) adminRules.oks[i] = ta.value;
+  });
+}
+
+document.addEventListener('DOMContentLoaded', loadAdminRules);
 
 // ---------------------------------------------------------------------------
 // Add user
